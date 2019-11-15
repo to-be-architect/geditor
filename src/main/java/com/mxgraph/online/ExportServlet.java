@@ -1,5 +1,7 @@
 package com.mxgraph.online;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +22,11 @@ import java.util.Map;
 @SuppressWarnings("serial")
 @WebServlet(name = "ExportServlet", urlPatterns = "/export")
 public class ExportServlet extends HttpServlet {
-    private final String EXPORT_URL = "http://localhost:8000/";
 
     private final String[] supportedServices = {"EXPORT_URL", "PLANTUML_URL", "VSD_CONVERT_URL", "EMF_CONVERT_URL"};
+    @Value("${server.port}")
+    private String port;
+    private final String EXPORT_URL = "http://localhost:" + port + "/";
 
     private void doRequest(String method, HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, IOException {
