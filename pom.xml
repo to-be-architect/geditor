@@ -87,6 +87,12 @@
     </dependencies>
 
     <repositories>
+
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
         <repository>
             <id>maven2</id>
             <name>maven2</name>
