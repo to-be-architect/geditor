@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -26,7 +28,6 @@ public class ExportServlet extends HttpServlet {
     private final String[] supportedServices = {"EXPORT_URL", "PLANTUML_URL", "VSD_CONVERT_URL", "EMF_CONVERT_URL"};
     @Value("${server.port}")
     private String port;
-    private final String EXPORT_URL = "http://localhost:" + port + "/";
 
     private void doRequest(String method, HttpServletRequest request,
                            HttpServletResponse response) throws ServletException, IOException {
@@ -60,8 +61,8 @@ public class ExportServlet extends HttpServlet {
                 // Ignore and use 0
             }
 
+            String EXPORT_URL = getExportUrl();
             String exportUrl = System.getenv(supportedServices[serviceId]);
-
             if (exportUrl == null) {
                 exportUrl = EXPORT_URL;
             }
@@ -136,6 +137,7 @@ public class ExportServlet extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
+    @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
         doRequest("GET", request, response);
@@ -144,8 +146,17 @@ public class ExportServlet extends HttpServlet {
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
+    @Override
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
         doRequest("POST", request, response);
+    }
+
+    private String getIP() throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostAddress();
+    }
+
+    private String getExportUrl() throws UnknownHostException {
+        return "http://" + getIP() + ":" + port + "/";
     }
 }
