@@ -61,6 +61,8 @@
             <groupId>com.github.jgraph</groupId>
             <artifactId>jgraphx</artifactId>
             <version>v3.4.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/jgraphx-v3.4.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

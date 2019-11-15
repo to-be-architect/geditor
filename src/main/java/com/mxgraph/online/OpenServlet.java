@@ -94,7 +94,6 @@ public class OpenServlet extends HttpServlet {
                 throw new RuntimeException("PNGImageDecoder0");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("PNGImageDecoder1");
         }
 
@@ -120,14 +119,14 @@ public class OpenServlet extends HttpServlet {
                         String value = URLDecoder.decode(Utils.inflate(bytes), Utils.CHARSET_FOR_URL_ENCODING);
                         result.put(key, value);
                     } catch (Exception e) {
-                        log.error("", e);
+                        log.info("", e);
                     }
                     // No need to parse the rest of the PNG
                     return result;
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("", e);
         }
 
         return null;
@@ -137,10 +136,8 @@ public class OpenServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter writer = response.getWriter();
-
         try {
             if (request.getContentLength() < Constants.MAX_REQUEST_SIZE) {
                 String filename = "";
@@ -235,10 +232,8 @@ public class OpenServlet extends HttpServlet {
             writeScript(writer,
                     "window.parent.alert('Out of memory');");
         } catch (Exception e) {
-            log.error("", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            writeScript(writer,
-                    "window.parent.alert(JSON.stringify(window.parent.mxResources.get('invalidOrMissingFile')));");
+            writeScript(writer, "window.parent.alert(JSON.stringify(window.parent.mxResources.get('invalidOrMissingFile')));");
         }
 
         writer.flush();
