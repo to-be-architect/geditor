@@ -1,5 +1,6 @@
 package com.mxgraph.online;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.ServletException;
@@ -23,6 +24,7 @@ import java.util.Map;
  */
 @SuppressWarnings("serial")
 @WebServlet(name = "ExportServlet", urlPatterns = "/export")
+@Slf4j
 public class ExportServlet extends HttpServlet {
 
     private final String[] supportedServices = {"EXPORT_URL", "PLANTUML_URL", "VSD_CONVERT_URL", "EMF_CONVERT_URL"};
@@ -107,7 +109,6 @@ public class ExportServlet extends HttpServlet {
 
                 if (key != null) {
                     for (String val : entry.getValue()) {
-
                         response.addHeader(entry.getKey(), val);
                     }
                 }
@@ -127,9 +128,8 @@ public class ExportServlet extends HttpServlet {
             out.flush();
             out.close();
         } catch (Exception e) {
-            response.setStatus(
-                    HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace();
+            log.info("", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -138,8 +138,7 @@ public class ExportServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doRequest("GET", request, response);
     }
 
@@ -147,8 +146,7 @@ public class ExportServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doRequest("POST", request, response);
     }
 
