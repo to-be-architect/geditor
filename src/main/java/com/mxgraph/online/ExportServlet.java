@@ -31,8 +31,7 @@ public class ExportServlet extends HttpServlet {
     @Value("${server.port}")
     private String port;
 
-    private void doRequest(String method, HttpServletRequest request,
-                           HttpServletResponse response) throws ServletException, IOException {
+    private void doRequest(String method, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int serviceId = 0;
             String proxyPath = "";
@@ -63,7 +62,7 @@ public class ExportServlet extends HttpServlet {
                 // Ignore and use 0
             }
 
-            String EXPORT_URL = getExportUrl();
+            String EXPORT_URL = getHost();
             String exportUrl = System.getenv(supportedServices[serviceId]);
             if (exportUrl == null) {
                 exportUrl = EXPORT_URL;
@@ -71,9 +70,7 @@ public class ExportServlet extends HttpServlet {
 
             URL url = new URL(exportUrl + proxyPath + queryString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
             con.setRequestMethod(method);
-
             //Copy request headers to export server
             Enumeration<String> headerNames = request.getHeaderNames();
 
@@ -154,7 +151,7 @@ public class ExportServlet extends HttpServlet {
         return InetAddress.getLocalHost().getHostAddress();
     }
 
-    private String getExportUrl() throws UnknownHostException {
+    private String getHost() throws UnknownHostException {
         return "http://" + getIP() + ":" + port + "/";
     }
 }
